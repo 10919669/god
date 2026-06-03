@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A1A2E"/>
+      <stop offset="100%" style="stop-color:#0F0F1A"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8D5A3"/>
+      <stop offset="100%" style="stop-color:#C9A96E"/>
+    </linearGradient>
+  </defs>
+  <!-- 背景 -->
+  <circle cx="24" cy="24" r="23" fill="url(#bg)" stroke="url(#gold)" stroke-width="1.5"/>
+  <!-- 骰子 -->
+  <rect x="14" y="14" width="20" height="20" rx="3" fill="none" stroke="url(#gold)" stroke-width="1.5"/>
+  <!-- 骰子点数 -->
+  <circle cx="19" cy="19" r="1.5" fill="#C9A96E"/>
+  <circle cx="29" cy="19" r="1.5" fill="#C9A96E"/>
+  <circle cx="24" cy="24" r="1.5" fill="#C9A96E"/>
+  <circle cx="19" cy="29" r="1.5" fill="#C9A96E"/>
+  <circle cx="29" cy="29" r="1.5" fill="#C9A96E"/>
+  <!-- 星星装饰 -->
+  <circle cx="8" cy="8" r="1" fill="#C9A96E" opacity="0.6"/>
+  <circle cx="40" cy="40" r="1" fill="#C9A96E" opacity="0.6"/>
+  <circle cx="40" cy="8" r="0.8" fill="#C9A96E" opacity="0.4"/>
+</svg>

@@ -1,0 +1,879 @@
+
+# 上帝帮你掷骰子｜AI 执行版 PRD（V1）
+
+## 1. 文档目标
+
+把上一版母文档继续下沉为可执行规格，重点补齐：
+
+* 模块拆分
+* 页面与交互清单
+* 输入输出
+* 状态定义
+* 规则清单
+* 接口假设
+* 数据对象
+* 埋点
+* 测试要点
+* 版本分期
+
+这套补充方式，符合 AI 执行版 PRD 的要求：需要把普通 PRD 再补成“模块、状态、规则、异常、测试”可直接落地的结构。  
+
+---
+
+## 2. 产品总目标
+
+### 2.1 目标
+
+为用户提供一个基于**当前时刻**的轻决策入口：
+
+* 轻题：快速给方向，适合分享
+* 社交题：制造站队与互动
+* 重题：先给方向，再提醒值得认真看，并导向大宗师
+
+### 2.2 核心原则
+
+* 前台不出现任何专业术语
+* 不使用出生信息
+* 不使用八字
+* 只基于“当前时刻”做判断
+* 地点可提升精度，但不是首版强拦截条件
+* 结果必须体现“被理解感”和“有分寸感”
+* 重题必须比轻题更克制、更有仪式感
+
+### 2.3 统一品牌底色
+
+**替你说出那一下没敢拍板的方向。**
+
+---
+
+## 3. 系统范围
+
+## 3.1 本期包含
+
+* 首页输入
+* 模板入口
+* 自由输入
+* 当前时间自动采集
+* 定位授权 / 拒绝 / 手动选城市
+* 快速模式 / 精准模式
+* 轻题 / 重题结果页
+* 分享卡
+* 升级到大宗师入口
+
+## 3.2 本期不包含
+
+* 八字输入
+* 出生信息
+* 长期命盘
+* 多轮复杂追问
+* 重度社区
+* 多人实时投票
+* 用户账户体系深度建设
+
+---
+
+## 4. 模块拆分
+
+## 4.1 模块 A：问题输入模块
+
+### 目标
+
+承接模板选择与自由输入，形成统一问题对象。
+
+### 输入
+
+* template_id
+* question_text
+* user_selected_category
+
+### 输出
+
+* normalized_question
+* question_type_hint
+* entry_source
+
+### 关键要求
+
+* 模板和输入并列展示
+* 用户可不选模板直接输入
+* 支持 A/B 文本输入，也支持单句问题输入
+
+---
+
+## 4.2 模块 B：时间与地点上下文模块
+
+### 目标
+
+采集当前测算所需上下文。
+
+### 输入
+
+* device_current_time
+* browser/app timezone
+* geolocation permission
+* latitude / longitude
+* manual_city_name
+
+### 输出
+
+* context_timestamp
+* timezone
+* precision_mode
+* geo_context
+
+### 关键要求
+
+* 当前时间自动获取，不要求用户手填
+* 地点授权成功进入精准模式
+* 地点拒绝则进入快速模式
+* 若授权失败，可手动选城市
+
+### 说明
+
+规则库中已明确：问事类计算以当前时刻为输入；地点会影响时间校正与时辰边界，因此有地点时应做更精确处理，无地点时只能降级。  
+
+---
+
+## 4.3 模块 C：问题分层模块
+
+### 目标
+
+判断题目属于轻题、社交题还是重题。
+
+### 输入
+
+* normalized_question
+* template_id
+* user_selected_category
+* keyword_features
+
+### 输出
+
+* seriousness_level
+* tone_mode
+* escalation_recommended
+
+### 分层定义
+
+#### L1：轻拍板
+
+* 吃什么
+* 喝什么
+* 穿什么
+* 去不去
+
+#### L2：社交站队
+
+* A 还是 B
+* 买哪个
+* 发不发
+* 选哪个更适合我
+
+#### L3：有后续影响的题
+
+* 涉及长期后果
+* 涉及关系推进 / 切断
+* 涉及更大金钱承诺
+* 涉及不可逆选择
+
+### 关键要求
+
+重题一定不能继续用“纯玩乐”口吻处理。
+
+---
+
+## 4.4 模块 D：后台判断引擎
+
+### 目标
+
+根据当前时刻与问题内容，生成结构化判断结果。
+
+### 输入
+
+* normalized_question
+* seriousness_level
+* context_timestamp
+* geo_context
+* precision_mode
+
+### 输出
+
+* direction_preference
+* interpretation_tags
+* caution_level
+* action_suggestion
+* trend_hint
+
+### 逻辑边界
+
+* 后台依据你给的规则体系执行
+* 前台禁止暴露具体术语
+* 无地点时允许输出，但要标明快速模式
+* 若关键上下文异常，返回兜底结果
+
+### 研发注意
+
+后台逻辑应基于当前问事时刻、时间校正、节气与月将、占时等规则推进，不能伪装成纯随机。规则库中明确了十干寄宫、占时划分、天地盘、四课、三传、九宗门等起算路径；角色文件还要求这些步骤在后台严格完成，但前台不得出现这些词。  
+
+---
+
+## 4.5 模块 E：结果翻译模块
+
+### 目标
+
+把后台结构化结果翻译为前台用户可理解的内容。
+
+### 输入
+
+* seriousness_level
+* tone_mode
+* direction_preference
+* interpretation_tags
+* caution_level
+* action_suggestion
+* trend_hint
+
+### 输出
+
+* result_title
+* result_reason
+* result_risk
+* result_action
+* result_trend
+* result_card_style
+
+### 文案模式
+
+#### 轻题
+
+语气：懂你的小闺蜜
+要求：说人话、接情绪、可分享
+
+#### 重题
+
+语气：宇宙裁决者
+要求：有仪式感、有分寸、先给方向再提醒
+
+---
+
+## 4.6 模块 F：分享与导流模块
+
+### 目标
+
+承接分享传播与深度转化。
+
+### 输入
+
+* result_card
+* seriousness_level
+* escalation_recommended
+
+### 输出
+
+* share_card
+* private_share_text
+* social_share_text
+* master_entry_cta
+
+### 主路径
+
+* 私聊发给朋友求意见
+
+### 次路径
+
+* 群聊站队
+* 社媒晒结果
+
+---
+
+## 5. 页面与交互清单
+
+## 5.1 页面 P1：首页
+
+### 页面目标
+
+让用户快速发起第一次测算。
+
+### 关键组件
+
+* 品牌标题
+* 一句话介绍
+* 模板区
+* 自由输入框
+* 立即测一下按钮
+* 精准模式说明
+* 历史入口（后续可加）
+
+### 页面文案建议
+
+主标题：
+**上帝帮你掷骰子**
+
+副标题：
+**别纠结啦！先让宇宙替你拍下板。**
+
+### 模板区
+
+#### 今日高频
+
+* 今天吃什么
+* 今天喝什么
+* 今天穿什么
+* 今天要不要出门
+
+#### 今日纠结
+
+* 发不发这条消息
+* 约不约 Ta
+* 买 A 还是 B
+* 先做哪个
+
+#### 认真一点
+
+* 要不要联系 Ta
+* 要不要继续推进
+* 要不要接这个机会
+
+### 核心动作
+
+* 点击模板
+* 输入问题
+* 立即测一下
+
+---
+
+## 5.2 页面 P2：权限与精度选择层
+
+### 页面目标
+
+解释地点权限与精度差异，不打断主流程。
+
+### 展示策略
+
+发起测算时轻弹层提示：
+
+* 开启位置：结果更准
+* 不开启：也能先测
+
+### 按钮
+
+* 开启精准模式
+* 先快速测一下
+* 手动选城市
+
+### 关键原则
+
+* 不强迫
+* 不恐吓
+* 不把权限说明写得太技术化
+
+---
+
+## 5.3 页面 P3：结果页（轻题）
+
+### 页面目标
+
+快速给结论并促发分享。
+
+### 结构
+
+1. 结果标题
+2. 一句理由
+3. 一个动作建议
+4. 分享按钮
+5. 再测一次
+
+### 示例结构
+
+* 今天更适合火锅
+* 你现在不是想吃得克制，是想吃得痛快
+* 别继续刷了，就点热的
+* 发给朋友看看
+
+---
+
+## 5.4 页面 P4：结果页（重题）
+
+### 页面目标
+
+先给方向，再表达分寸，再导向深服务。
+
+### 结构
+
+1. 方向判断
+2. 谨慎提醒
+3. 风险提示
+4. 发给朋友求助
+5. 进入大宗师
+
+### 示例结构
+
+* 如果非要先走一步，今天更偏 A
+* 但这题不是随便一下就能定的
+* 更怕的不是选错，而是没看清代价
+* 先发给你信任的人看看
+* 想认真看，再进入完整推演
+
+---
+
+## 5.5 页面 P5：分享卡预览页
+
+### 页面目标
+
+提供可截图或直接分享的内容卡。
+
+### 卡片元素
+
+* 问题摘要
+* 结果结论
+* 一句理由
+* 品牌标识
+* 深度入口钩子
+
+### 模板建议
+
+#### 模板 1：晒结论
+
+适合轻题
+
+#### 模板 2：晒对战
+
+适合社交题
+
+#### 模板 3：发起求助
+
+适合重题
+
+---
+
+## 6. 输入输出规范
+
+## 6.1 前端输入对象
+
+```json
+{
+  "template_id": "eat_today",
+  "question_text": "今天吃什么",
+  "user_selected_category": "daily",
+  "timestamp_client": "2026-04-11T20:30:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "geo_permission_status": "granted",
+  "latitude": 31.2304,
+  "longitude": 121.4737,
+  "manual_city_name": ""
+}
+```
+
+## 6.2 后台标准化对象
+
+```json
+{
+  "normalized_question": "今天吃什么",
+  "question_type_hint": "daily_choice",
+  "seriousness_level": "L1",
+  "precision_mode": "precise",
+  "context_timestamp": "2026-04-11T20:30:00+08:00",
+  "geo_context": {
+    "city": "上海市",
+    "latitude": 31.2304,
+    "longitude": 121.4737
+  }
+}
+```
+
+## 6.3 结果输出对象
+
+```json
+{
+  "result_title": "今天更适合火锅",
+  "result_reason": "你现在不是想吃得轻，是想吃得过瘾。",
+  "result_risk": "",
+  "result_action": "别继续刷外卖了，直接选热的。",
+  "result_trend": "今晚更适合立刻决定，不适合反复比较。",
+  "tone_mode": "bestie",
+  "seriousness_level": "L1",
+  "escalation_recommended": false,
+  "share_card_type": "conclusion"
+}
+```
+
+---
+
+## 7. 状态机定义
+
+## 7.1 主流程状态
+
+* idle：初始
+* editing：输入中
+* requesting_geo：请求位置权限
+* geo_selected：已获取位置
+* geo_skipped：跳过位置
+* calculating：处理中
+* success：结果成功
+* fail：结果失败
+
+## 7.2 结果页状态
+
+* result_light
+* result_social
+* result_serious
+
+## 7.3 中断与恢复
+
+* interrupted_by_permission_popup
+* network_retryable_error
+* return_with_cached_question
+
+### 缓存要求
+
+* 用户中断返回时，保留最近一次 question_text
+* 最近一次模板选择保留 30 分钟
+* 最近一次结果可本地缓存，用于“再打开继续看”
+
+---
+
+## 8. 规则清单
+
+## 8.1 前台规则
+
+1. 不出现专业术语。
+2. 不要求出生信息。
+3. 轻题文案必须更像“懂你”。
+4. 重题文案必须更像“有分寸的提醒”。
+5. 结果卡至少包含结论与理由。
+6. 重题结果卡必须包含风险或提醒。
+7. 私聊分享按钮优先级最高。
+8. 升级入口只在重题和部分边界题强展示。
+
+## 8.2 分层规则
+
+1. 默认模板“吃什么/喝什么/穿什么/去不去”归为 L1。
+2. 含明显 A/B 对战词的问题优先归为 L2。
+3. 含关系推进、分开、是否继续、未来影响、重大支出等语义归为 L3。
+4. 若系统置信度不足，优先从轻题提升一级，而不是降级成玩具。
+
+## 8.3 精度规则
+
+1. 有地点时走精准模式。
+2. 无地点时走快速模式。
+3. 快速模式要提示“结果基于当前标准时间估算”。
+4. 若用户手动选城市，视作半精准模式。
+
+### 依据
+
+规则库对占时和真太阳时有明确要求，地点会影响时辰边界和节气/月将判断，因此应在产品上区分精度模式，而不是假装结果完全一致。   
+
+---
+
+## 9. 接口假设
+
+## 9.1 发起测算接口
+
+`POST /api/v1/oracle/decision`
+
+### Request
+
+```json
+{
+  "question_text": "要不要联系Ta",
+  "template_id": "contact_ta",
+  "user_selected_category": "relationship",
+  "timestamp_client": "2026-04-11T21:12:00+08:00",
+  "timezone": "Asia/Shanghai",
+  "geo_permission_status": "denied",
+  "latitude": null,
+  "longitude": null,
+  "manual_city_name": "上海市"
+}
+```
+
+### Response
+
+```json
+{
+  "request_id": "req_123",
+  "precision_mode": "manual_city",
+  "seriousness_level": "L3",
+  "tone_mode": "oracle",
+  "result_title": "如果非要先走一步，今天更偏主动一点。",
+  "result_reason": "你现在真正纠结的不是要不要联系，而是怕先开口后没有回响。",
+  "result_risk": "这题更怕仓促，不怕慢半步。",
+  "result_action": "先发出一条轻一点的试探，而不是一次性把话说满。",
+  "result_trend": "这件事短期内会继续拉扯，适合先试探，不适合逼结果。",
+  "escalation_recommended": true,
+  "share_card_type": "ask_help"
+}
+```
+
+---
+
+## 9.2 分享上报接口
+
+`POST /api/v1/oracle/share-event`
+
+### Request
+
+```json
+{
+  "request_id": "req_123",
+  "share_channel": "private_chat",
+  "share_card_type": "ask_help",
+  "clicked_at": "2026-04-11T21:15:00+08:00"
+}
+```
+
+---
+
+## 9.3 升级入口点击接口
+
+`POST /api/v1/oracle/escalate-click`
+
+### Request
+
+```json
+{
+  "request_id": "req_123",
+  "entry_position": "serious_result_footer",
+  "clicked_at": "2026-04-11T21:16:00+08:00"
+}
+```
+
+---
+
+## 10. 数据对象草案
+
+## 10.1 QuestionSession
+
+* session_id
+* user_id
+* entry_source
+* template_id
+* question_text
+* category
+* seriousness_level
+* created_at
+
+## 10.2 TimeContext
+
+* session_id
+* timestamp_client
+* timezone
+* precision_mode
+* geo_permission_status
+* latitude
+* longitude
+* city_name
+
+## 10.3 ResultPayload
+
+* session_id
+* result_title
+* result_reason
+* result_risk
+* result_action
+* result_trend
+* tone_mode
+* share_card_type
+* escalation_recommended
+* created_at
+
+## 10.4 EventLog
+
+* event_id
+* session_id
+* event_name
+* event_value
+* occurred_at
+
+---
+
+## 11. 埋点方案
+
+## 11.1 首页埋点
+
+* home_view
+* template_click
+* input_focus
+* submit_click
+
+## 11.2 权限埋点
+
+* geo_popup_show
+* geo_grant
+* geo_deny
+* geo_manual_city_select
+
+## 11.3 结果埋点
+
+* result_success
+* result_fail
+* result_light_view
+* result_social_view
+* result_serious_view
+
+## 11.4 分享埋点
+
+* share_click
+* share_channel_private
+* share_channel_group
+* share_channel_social
+* share_success_callback
+
+## 11.5 转化埋点
+
+* escalate_cta_show
+* escalate_cta_click
+* revisit_with_serious_question
+
+---
+
+## 12. 异常处理
+
+## 12.1 用户输入异常
+
+* 空输入：禁用提交
+* 超长输入：提示精简到 40 字内
+* 敏感内容：走兜底结果或拦截
+
+## 12.2 权限异常
+
+* 定位拒绝：切快速模式
+* 定位失败：引导手动选城市
+* 城市选择失败：继续快速模式
+
+## 12.3 系统异常
+
+* 网络失败：提示稍后再试
+* 后台错误：返回兜底结果
+* 时间异常：提示校准设备时间
+
+## 12.4 文案兜底
+
+### 轻题兜底
+
+* 今天更适合先选简单一点的那个。
+* 你现在更需要顺着感觉走，而不是继续比较。
+
+### 重题兜底
+
+* 这题先别急着一步走满。
+* 如果一定要先动，今天更适合试探，不适合定局。
+
+---
+
+## 13. 测试要点
+
+## 13.1 主流程测试
+
+* 首页模板点击可直接进入测算
+* 自由输入可发起测算
+* 当前时间自动采集成功
+* 定位授权成功后进入精准模式
+* 定位拒绝后仍可正常返回结果
+
+## 13.2 分层测试
+
+* 日常模板是否稳定落入 L1
+* A/B 对战问题是否落入 L2
+* 关系推进 / 切断问题是否落入 L3
+* 边界问题是否不会误判成轻玩具结果
+
+## 13.3 文案测试
+
+* 轻题是否符合闺蜜语气
+* 重题是否符合宇宙裁决者语气
+* 前台是否出现任何术语泄露
+* 结果是否包含结论与理由
+* 重题是否包含提醒与风险
+
+## 13.4 分享测试
+
+* 私聊分享文案是否正常生成
+* 分享卡是否带品牌标识
+* 不同结果类型是否匹配不同卡模板
+
+## 13.5 转化测试
+
+* 重题是否出现升级入口
+* 升级入口点击是否正确上报
+* 返回用户再次提更认真问题是否可追踪
+
+---
+
+## 14. 版本切分建议
+
+## MVP
+
+* 首页模板 + 输入并列
+* 当前时间自动采集
+* 定位授权 / 跳过 / 手动选城市
+* L1 / L3 两套结果页
+* 私聊分享主路径
+* 大宗师升级入口
+* 基础埋点
+
+## V1.1
+
+* L2 社交站队模板
+* 三种分享卡模板
+* 结果页个性化文案增强
+* “再测一次”推荐问题
+
+## V1.2
+
+* 历史记录
+* 收藏结果
+* 回访提醒
+* 认真问题承接页优化
+
+---
+
+## 15. 研发拆任务建议
+
+### 前端
+
+* 首页
+* 权限弹层
+* 结果页双模板
+* 分享卡组件
+* 埋点接入
+
+### 后端
+
+* 输入标准化
+* 分层模块
+* 判断引擎
+* 文案翻译层
+* 事件上报
+
+### 算法 / 规则
+
+* 当前时刻上下文解析
+* 精准 / 快速模式差异
+* 轻题 / 重题翻译模板映射
+
+### 设计
+
+* 首页信息架构
+* 轻题结果卡
+* 重题结果卡
+* 分享卡三模板
+* 升级入口视觉弱强层级
+
+---
+
+## 16. 下一步最适合补的文档
+
+建议继续拆 2 份子文档：
+
+### 文档 A
+
+**《首页与结果页交互稿说明》**
+把每个页面的组件、状态、按钮、空状态写到设计级。
+
+### 文档 B
+
+**《后台判断字段 → 前台文案映射表》**
+把 `direction_preference / caution_level / trend_hint` 这些字段，逐条翻译成用户可见文案。
+
+你回复“继续拆页面”或“继续拆文案映射表”，我就直接接着往下写。
