@@ -1,0 +1,1404 @@
+/* ============================================
+   上帝帮你掷骰子 - 宇宙神秘风视觉设计
+   ============================================ */
+
+/* ---------- Google Fonts ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+/* ============================================
+   1. CSS 变量
+   ============================================ */
+:root {
+  --bg-primary: #1A1A2E;
+  --bg-secondary: #16213E;
+  --bg-tertiary: #0F3460;
+  --card-bg: rgba(255, 255, 255, 0.03);
+  --card-border: rgba(201, 169, 110, 0.2);
+  --text-primary: #E8E8E8;
+  --text-secondary: #8B8B9E;
+  --gold: #C9A96E;
+  --gold-light: #E8D5A3;
+  --gold-glow: rgba(201, 169, 110, 0.3);
+  --gold-dark: #8B7340;
+  --danger: #E74C3C;
+  --danger-bg: rgba(231, 76, 60, 0.1);
+  --safe: #2ECC71;
+  --safe-bg: rgba(46, 204, 113, 0.1);
+  --warning: #F39C12;
+  --font-title: 'Cinzel Decorative', 'Noto Serif SC', serif;
+  --font-body: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-gold: 0 0 20px rgba(201, 169, 110, 0.15);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   2. 全局重置与基础
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+button, a, input, .template-card, .poster-card, .result-badge, .btn-primary, .btn-secondary, .btn-sarcastic, .btn-home {
+  transition-property: background-color, border-color, color, opacity, box-shadow, transform;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg-primary);
+  background-image: url('../assets/bg-cosmos.png');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--bg-primary);
+}
+
+::-moz-selection {
+  background: var(--gold);
+  color: var(--bg-primary);
+}
+
+/* ---------- 自定义滚动条 ---------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gold-dark);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* Firefox 滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-dark) transparent;
+}
+
+/* ============================================
+   3. 粒子 Canvas
+   ============================================ */
+#particles-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* ============================================
+   4. 页面系统
+   ============================================ */
+.page {
+  display: none;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.page.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 页面切换动画 */
+.page-entering {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ============================================
+   5. 首页 (#page-home)
+   ============================================ */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 12px;
+  max-width: 960px;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ---------- 品牌区域 ---------- */
+.brand-area {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.brand-title-img {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 20px rgba(180, 140, 220, 0.3));
+}
+
+.brand-title {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  text-shadow: none;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+  line-height: 1.3;
+}
+
+.brand-subtitle {
+  font-size: 0.85rem;
+  color: rgba(200, 180, 230, 0.8);
+  margin-top: 10px;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-subtitle::before,
+.brand-subtitle::after {
+  content: '';
+  flex: 1;
+  max-width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 180, 230, 0.5), transparent);
+}
+
+/* ---------- 模板卡片 ---------- */
+.template-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas:
+    "custom eat  drink wear  buy"
+    "custom wash sleep goout send";
+  gap: 10px;
+  width: 100%;
+}
+
+.template-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 14px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* "我有一个问题" 卡片占右侧底部2行 */
+.template-card[data-template="custom"] {
+  grid-area: custom;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.template-card[data-template="eat_today"]  { grid-area: eat; }
+.template-card[data-template="drink_today"] { grid-area: drink; }
+.template-card[data-template="wear_today"]  { grid-area: wear; }
+.template-card[data-template="wash_hair"]   { grid-area: wash; }
+.template-card[data-template="sleep_early"] { grid-area: sleep; }
+.template-card[data-template="go_out"]      { grid-area: goout; }
+.template-card[data-template="send_msg"]    { grid-area: send; }
+.template-card[data-template="buy_it"]      { grid-area: buy; }
+
+.template-card:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-2px);
+}
+
+.template-card:active {
+  transform: translateY(0);
+}
+
+.template-card .card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 1.4rem;
+  background: rgba(201, 169, 110, 0.08);
+}
+
+.template-card .card-title {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.template-card .card-desc {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ---------- 自由输入区域 ---------- */
+.free-input-area {
+  width: 100%;
+  margin-top: 24px;
+  display: none;
+}
+
+.free-input-area.visible {
+  display: block;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.free-input-area textarea {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  resize: none;
+  height: 80px;
+  font-family: var(--font-body);
+  line-height: 1.6;
+  transition: var(--transition);
+}
+
+.free-input-area textarea:focus {
+  border-color: var(--gold);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--gold-glow);
+}
+
+.free-input-area textarea::placeholder {
+  color: var(--text-secondary);
+}
+
+.char-count {
+  text-align: right;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.char-count.warning {
+  color: var(--warning);
+}
+
+.char-count.danger {
+  color: var(--danger);
+}
+
+/* ---------- 提交按钮 ---------- */
+.btn-submit {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--bg-primary);
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 1px;
+  font-family: var(--font-body);
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+.btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ---------- 精度提示 ---------- */
+.precision-hint {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 24px;
+  opacity: 0.6;
+  line-height: 1.5;
+}
+
+/* ============================================
+   6. 权限层 (#page-permission)
+   ============================================ */
+.permission-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.permission-modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.permission-modal h2 {
+  font-family: var(--font-title);
+  color: var(--gold);
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.permission-modal p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.permission-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.permission-btn {
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+
+.permission-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.permission-btn.primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--bg-primary);
+  border: none;
+  font-weight: 600;
+}
+
+.permission-btn.primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   7. 加载动画 (#page-loading)
+   ============================================ */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* ---------- 轨道动画 ---------- */
+.loading-orbit {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.loading-orbit .loading-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+
+.loading-orbit .loading-ring:nth-child(1) {
+  width: 80px;
+  height: 80px;
+  top: 0;
+  left: 0;
+  border-top-color: var(--gold);
+  border-right-color: rgba(201, 169, 110, 0.3);
+  animation: orbit 2s linear infinite;
+}
+
+.loading-orbit .loading-ring:nth-child(2) {
+  width: 56px;
+  height: 56px;
+  top: 12px;
+  left: 12px;
+  border-bottom-color: rgba(201, 169, 110, 0.6);
+  border-left-color: rgba(201, 169, 110, 0.2);
+  animation: orbit 3s linear infinite reverse;
+}
+
+.loading-orbit .loading-ring:nth-child(3) {
+  width: 32px;
+  height: 32px;
+  top: 24px;
+  left: 24px;
+  border-top-color: rgba(201, 169, 110, 0.4);
+  border-right-color: rgba(201, 169, 110, 0.1);
+  animation: orbit 4s linear infinite;
+}
+
+/* ---------- 中心发光点 ---------- */
+.loading-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow:
+    0 0 20px var(--gold-glow),
+    0 0 40px var(--gold-glow),
+    0 0 60px rgba(201, 169, 110, 0.15);
+  transform: translate(-50%, -50%);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ---------- 加载文字 ---------- */
+.loading-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 32px;
+  letter-spacing: 2px;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: ''; }
+  25%  { content: '.'; }
+  50%  { content: '..'; }
+  75%  { content: '...'; }
+  100% { content: ''; }
+}
+
+/* ============================================
+   通用：回首页按钮（卡片右上角）
+   ============================================ */
+.btn-home {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: rgba(201, 169, 110, 0.08);
+  border: 1px solid var(--card-border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.btn-home:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201, 169, 110, 0.15);
+}
+
+/* ============================================
+   通用：结果页插画
+   ============================================ */
+.result-illustration {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  margin-bottom: 16px;
+}
+
+.share-illustration {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+/* ============================================
+   8. 结果页-轻题 (#page-result-light)
+   ============================================ */
+.result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+}
+
+.result-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* ---------- 结果徽章 ---------- */
+.result-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+.badge-positive {
+  background: var(--safe-bg);
+  color: var(--safe);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.badge-neutral {
+  background: rgba(243, 156, 18, 0.1);
+  color: var(--warning);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+}
+
+.badge-negative {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+/* ---------- 结果标题 ---------- */
+.result-title {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  color: var(--gold);
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+/* ---------- 结果内容区 ---------- */
+.result-section {
+  margin-bottom: 20px;
+}
+
+.result-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.result-reason {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ---------- 风险提示区 ---------- */
+.result-risk-area {
+  background: var(--danger-bg);
+  border-left: 3px solid var(--danger);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.result-risk {
+  color: var(--danger);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ---------- 建议与趋势 ---------- */
+.result-action {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.result-trend {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* ---------- 分享梗 ---------- */
+.result-meme-area,
+.oracle-meme-area {
+  margin-top: 16px;
+  padding: 10px 16px;
+  background: rgba(201, 169, 110, 0.08);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+}
+
+.result-meme,
+.oracle-meme {
+  color: var(--gold);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ---------- 时间戳 ---------- */
+.result-timestamp {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: 16px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* ---------- 分隔线 ---------- */
+.result-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--card-border), transparent);
+  margin: 20px 0;
+  border: none;
+}
+
+/* ---------- 结果按钮组 ---------- */
+.result-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.btn-primary {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--bg-primary);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* ---------- 毒舌切换按钮 ---------- */
+.btn-sarcastic {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: 1px dashed var(--gold);
+  color: var(--gold);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+}
+
+.btn-sarcastic:hover {
+  background: rgba(201, 169, 110, 0.1);
+  border-style: solid;
+}
+
+.btn-sarcastic:active {
+  transform: translateY(0);
+  background: rgba(201, 169, 110, 0.15);
+}
+
+/* ---------- 时间彩蛋 ---------- */
+.result-time-egg {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.12), rgba(201, 169, 110, 0.04));
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--gold);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ============================================
+   9. 结果页-重题 (#page-result-oracle)
+   ============================================ */
+.oracle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 20px;
+}
+
+.oracle-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 40px 28px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* 顶部装饰线 */
+.oracle-card::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--gold);
+  margin: 0 auto 24px;
+}
+
+/* ---------- 神谕标题 ---------- */
+.oracle-title {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+  line-height: 1.4;
+}
+
+/* ---------- 神谕滚动区 ---------- */
+.oracle-scroll {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.oracle-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.oracle-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.oracle-scroll::-webkit-scrollbar-thumb {
+  background: var(--gold-dark);
+  border-radius: 2px;
+}
+
+.oracle-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
+/* ---------- 神谕分区 ---------- */
+.oracle-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.oracle-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.oracle-section-title {
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+/* ---------- 风险区块 ---------- */
+.oracle-risk-block {
+  background: rgba(231, 76, 60, 0.05);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.oracle-risk-title {
+  color: var(--danger);
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.oracle-risk-text {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+/* ---------- 行动召唤区 ---------- */
+.oracle-cta-area {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.btn-escalate {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 1px;
+  font-family: var(--font-body);
+}
+
+.btn-escalate:hover {
+  background: var(--gold);
+  color: var(--bg-primary);
+}
+
+.btn-escalate:active {
+  transform: translateY(0);
+}
+
+/* ============================================
+   10. 分享卡预览 (#page-share)
+   ============================================ */
+.share-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 20px;
+  min-height: 100vh;
+  position: relative;
+}
+
+.share-preview {
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.share-preview canvas,
+.share-preview img {
+  max-width: 320px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.share-buttons {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+}
+.share-buttons .btn-primary,
+.share-buttons .btn-secondary {
+  white-space: nowrap;
+}
+
+.share-note {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-top: 16px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.btn-back-result {
+  display: inline-block;
+  padding: 6px 16px;
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+.btn-back-result:hover {
+  color: var(--gold);
+}
+
+/* ============================================
+   11. 通用动画
+   ============================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-slide-up {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.4s ease forwards;
+}
+
+.animate-delay-1 {
+  animation-delay: 0.1s;
+  opacity: 0;
+}
+
+.animate-delay-2 {
+  animation-delay: 0.2s;
+  opacity: 0;
+}
+
+.animate-delay-3 {
+  animation-delay: 0.3s;
+  opacity: 0;
+}
+
+/* ============================================
+   12. 响应式设计
+   ============================================ */
+
+/* ---------- 移动端 (<768px) ---------- */
+@media (max-width: 767px) {
+  body {
+    background-attachment: scroll;
+  }
+  .template-cards {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "eat  drink"
+      "wear buy"
+      "wash sleep"
+      "goout send"
+      "custom custom";
+  }
+
+  .home-container {
+    max-width: 480px;
+  }
+}
+
+/* ---------- 平板及以上 (>=768px) ---------- */
+@media (min-width: 768px) {
+  .brand-title {
+    font-size: 2.8rem;
+  }
+
+  .result-card,
+  .oracle-card {
+    padding: 40px 32px;
+  }
+
+  .permission-modal {
+    padding: 40px;
+  }
+
+  .share-preview canvas,
+  .share-preview img {
+    max-width: 360px;
+  }
+}
+
+/* ---------- 桌面端 (>=1024px) ---------- */
+@media (min-width: 1024px) {
+  .brand-title {
+    font-size: 3.2rem;
+  }
+
+  .home-container {
+    max-width: 960px;
+  }
+
+  .template-cards {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .result-card {
+    max-width: 440px;
+  }
+
+  .oracle-card {
+    max-width: 480px;
+    padding: 48px 36px;
+  }
+
+  .share-preview canvas,
+  .share-preview img {
+    max-width: 400px;
+  }
+}
+
+/* ============================================
+   13. 工具类
+   ============================================ */
+.text-gold {
+  color: var(--gold);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-8 {
+  margin-top: 8px;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+
+.mt-32 {
+  margin-top: 32px;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.mb-24 {
+  margin-bottom: 24px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ============================================
+   海报风格结果页
+   ============================================ */
+.poster-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 16px;
+  background: #050510;
+}
+.poster-card {
+  width: 100%;
+  max-width: 400px;
+  background: #0a0a1a;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 80px rgba(75,44,130,0.15);
+}
+.poster-bg {
+  width: 100%;
+  display: block;
+  border-radius: 0;
+  margin-top: 0;
+  position: relative;
+}
+.poster-bg::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, #0a0a1a);
+  pointer-events: none;
+}
+.poster-divider {
+  display: none;
+}
+.poster-content {
+  padding: 0 24px 20px;
+  margin-top: -40px;
+  position: relative;
+  z-index: 2;
+}
+.poster-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+.poster-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: #F3E8FF;
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  text-shadow: 0 0 20px rgba(243,232,255,0.3);
+}
+.poster-title-oracle { font-size: 22px; }
+.poster-section { margin-bottom: 14px; }
+.poster-label {
+  font-size: 11px;
+  color: rgba(243,232,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.poster-text {
+  color: rgba(226,232,240,0.9);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.poster-action { color: #D4A574; }
+.poster-trend { color: rgba(243,232,255,0.4); font-style: italic; }
+.poster-risk-area {
+  margin: 10px 0;
+  padding: 10px 12px;
+  background: rgba(231,76,60,0.08);
+  border: 1px solid rgba(231,76,60,0.15);
+  border-radius: 8px;
+}
+.poster-risk-title {
+  font-size: 12px;
+  color: #E74C3C;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.poster-risk {
+  font-size: 13px;
+  color: rgba(231,76,60,0.8);
+  line-height: 1.6;
+}
+.poster-meme {
+  font-size: 13px;
+  color: rgba(243,232,255,0.5);
+  font-style: italic;
+  text-align: center;
+  padding: 8px;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+}
+.poster-timestamp {
+  font-size: 10px;
+  color: rgba(243,232,255,0.2);
+  text-align: center;
+  margin-top: 12px;
+}
+.poster-cta-area { margin: 12px 0; }
+.poster-watermark {
+  text-align: center;
+  padding: 4px 0 12px;
+  font-size: 10px;
+  color: rgba(243,232,255,0.15);
+}
+.poster-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 400px;
+}
+.poster-actions .btn-primary,
+.poster-actions .btn-secondary,
+.poster-actions .btn-sarcastic {
+  width: 100%;
+}
+.poster-btn-home {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255,255,255,0.08) !important;
+  border: none !important;
+  color: #F3E8FF !important;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+@media (min-width: 768px) {
+  .poster-card { max-width: 420px; }
+  .poster-illustration { height: 220px; }
+  .poster-illust-lg { height: 260px; }
+}
+
+/* ─── 一句话截图区 ─── */
+.poster-quote-area {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, rgba(75,44,130,0.12), rgba(16,185,129,0.06));
+  border-left: 3px solid rgba(139,92,246,0.5);
+  margin: 0 0 4px 0;
+}
+.poster-quote {
+  font-size: 16px;
+  font-weight: 600;
+  color: #F3E8FF;
+  text-align: center;
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px rgba(243,232,255,0.2);
+}

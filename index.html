@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>上帝帮你掷骰子 - 帮你把今天这一步先定下来</title>
+
+<!-- Favicon -->
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<!-- SEO -->
+<meta name="description" content="纠结今天要不要做、该不该冲？让上帝帮你掷骰子，先把这一步定下来。">
+<meta name="keywords" content="决策,掷骰子,大六壬,宇宙,纠结,选择">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="上帝帮你掷骰子">
+<meta property="og:description" content="先把今天这一步定下来">
+<meta property="og:image" content="assets/og-image.jpg">
+<meta property="og:url" content="https://god-rolls-dice.com/">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="上帝帮你掷骰子">
+<meta name="twitter:description" content="先把今天这一步定下来">
+<meta name="twitter:image" content="assets/og-image.jpg">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&amp;family=Manrope:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "mystic-purple": "#4B2C82",
+                        "deep-indigo": "#1A1A2E",
+                        "emerald-glint": "#10B981",
+                        "pearl-glow": "#F3E8FF",
+                        "primary": "#D1D5DB",
+                        "surface": "#0F0F1A"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif SC", "serif"],
+                        "body": ["Manrope", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- 基础样式（不依赖 Tailwind，确保 CDN 失败时页面仍可显示） -->
+<style>
+    html, body { margin: 0; padding: 0; height: 100%; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; min-height: 100vh; }
+    body {
+        background: #050510 !important;
+        background-image: none !important;
+        color: #E2E8F0 !important;
+        font-family: 'Manrope', 'Noto Sans SC', sans-serif !important;
+        overflow-x: hidden;
+        min-height: auto !important;
+        -webkit-font-smoothing: antialiased;
+    }
+    /* Tailwind 自定义颜色备用 */
+    .text-pearl-glow { color: #F3E8FF !important; }
+    .text-emerald-glint { color: #10B981 !important; }
+    .text-pearl-glow\/60 { color: rgba(243, 232, 255, 0.6) !important; }
+    .text-pearl-glow\/70 { color: rgba(243, 232, 255, 0.7) !important; }
+    .text-pearl-glow\/30 { color: rgba(243, 232, 255, 0.3) !important; }
+    .text-pearl-glow\/20 { color: rgba(243, 232, 255, 0.2) !important; }
+    .text-emerald-glint\/60 { color: rgba(16, 185, 129, 0.6) !important; }
+    .bg-emerald-glint { background-color: #10B981; }
+    .bg-emerald-glint\/20 { background-color: rgba(16, 185, 129, 0.2); }
+    .bg-emerald-glint\/40 { background-color: rgba(16, 185, 129, 0.4); }
+    .bg-mystic-purple { background-color: #7C3AED; }
+    .border-emerald-glint\/50 { border-color: rgba(16, 185, 129, 0.5); }
+    .border-emerald-glint\/40 { border-color: rgba(16, 185, 129, 0.4); }
+    .border-b-2 { border-bottom: 2px solid; }
+    .border-dashed { border-style: dashed; }
+    .border-none { border: none; }
+    .font-headline { font-family: 'Noto Serif SC', serif !important; }
+    .font-body { font-family: 'Manrope', 'Noto Sans SC', sans-serif; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .drop-shadow-\[0_0_20px_rgba\(243\,232\,255\,0\.4\)\] { filter: drop-shadow(0 0 20px rgba(243,232,255,0.4)); }
+    .transition-colors { transition: color 0.3s; }
+    .hover\:text-pearl-glow:hover { color: #F3E8FF; }
+    .bg-transparent { background: transparent; }
+    .bg-white { background: white; }
+    .pb-1 { padding-bottom: 0.25rem; }
+    .bottom-1\/4 { bottom: 25%; }
+    .fixed { position: fixed; }
+    .absolute { position: absolute; }
+    .cursor-pointer { cursor: pointer; }
+    .group { }
+    .animate-slide-up { animation: slideUp 0.6s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .animate-spin { animation: spin 20s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .animate-bounce { animation: bounce 1s infinite; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .animate-twinkle { animation: twinkle 2s ease-in-out infinite; }
+    @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .md\:hidden { display: none; }
+    @media (min-width: 768px) { .md\:hidden { display: none; } .md\:flex { display: flex; } .md\:text-5xl { font-size: 3rem; } }
+    /* 核心布局（Tailwind 备用） */
+    .flex-grow { flex-grow: 1; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-4 { gap: 1rem; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .text-center { text-align: center; }
+    .w-full { width: 100%; }
+    .min-h-screen { min-height: 100vh; }
+    .overflow-hidden { overflow: hidden; }
+    .no-underline { text-decoration: none; }
+    .z-20 { z-index: 20; }
+    .z-30 { z-index: 30; }
+    .z-50 { z-index: 50; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .pt-6 { padding-top: 1.5rem; }
+    .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+    .px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .max-w-7xl { max-width: 80rem; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    /* 宇宙版核心组件 */
+    .cosmic-canvas {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow-x: hidden;
+        background: #050510;
+    }
+    .cosmic-canvas > nav { position: relative; width: 100%; max-width: 80rem; margin: 0 auto; padding: 1rem 2rem 0.75rem; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
+    .cosmic-canvas > main { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 1.1rem; position: relative; z-index: 20; }
+    .cosmic-canvas > footer { width: 100%; padding: 2.5rem 0; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; position: relative; z-index: 30; }
+    .text-pearl-glow { color: #F3E8FF; }
+    .text-emerald-glint { color: #10B981; }
+    .font-headline { font-family: 'Noto Serif SC', serif; }
+    .text-4xl { font-size: 2.25rem; font-weight: 900; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .tracking-widest { letter-spacing: 0.1em; }
+    .drop-shadow-\[0_0_20px_rgba\(243\,232\,255\,0\.4\)\] { filter: drop-shadow(0 0 20px rgba(243,232,255,0.4)); }
+    .hidden { display: none; }
+    /* ========== 海报风格结果页 ========== */
+    .poster-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 16px;
+        background: #050510;
+    }
+    .poster-card {
+        width: 100%;
+        max-width: 400px;
+        background: #0a0a1a;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 80px rgba(75,44,130,0.15);
+    }
+    .poster-bg {
+        width: 100%;
+        height: auto;
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
+    .poster-top-deco {
+        height: 60px;
+        background: linear-gradient(135deg, rgba(75,44,130,0.3), rgba(16,185,129,0.15));
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .poster-brand {
+        text-align: center;
+        padding: 12px 0 4px;
+        font-family: 'Noto Serif SC', serif;
+        font-size: 18px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #F3E8FF, #D4A574, #F3E8FF);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .poster-question {
+        text-align: center;
+        padding: 0 20px 12px;
+        font-size: 13px;
+        color: rgba(243,232,255,0.6);
+        line-height: 1.4;
+    }
+    .poster-illustration {
+        margin: 0 20px;
+        height: 180px;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .poster-illust-lg { height: 200px; }
+    .poster-divider {
+        margin: 16px 40px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(243,232,255,0.15), transparent);
+    }
+    /* ─── 一句话截图区 ─── */
+    .poster-quote-area {
+        padding: 16px 24px;
+        background: linear-gradient(135deg, rgba(75,44,130,0.12), rgba(16,185,129,0.06));
+        border-left: 3px solid rgba(139,92,246,0.5);
+        margin: 0 0 4px 0;
+    }
+    .poster-quote {
+        font-size: 16px;
+        font-weight: 600;
+        color: #F3E8FF;
+        text-align: center;
+        line-height: 1.7;
+        letter-spacing: 0.5px;
+        text-shadow: 0 0 20px rgba(243,232,255,0.2);
+    }
+    .poster-content { padding: 0 24px 16px; position: relative; z-index: 1; }
+    .poster-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        margin-bottom: 10px;
+    }
+    .poster-title {
+        font-family: 'Noto Serif SC', serif;
+        font-size: 20px;
+        font-weight: 900;
+        color: #F3E8FF;
+        text-align: center;
+        margin-bottom: 16px;
+        line-height: 1.4;
+        text-shadow: 0 0 20px rgba(243,232,255,0.3);
+    }
+    .poster-title-oracle { font-size: 22px; }
+    .poster-section { margin-bottom: 14px; }
+    .poster-label {
+        font-size: 11px;
+        color: rgba(243,232,255,0.4);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 6px;
+    }
+    .poster-text {
+        color: rgba(226,232,240,0.9);
+        font-size: 14px;
+        line-height: 1.7;
+    }
+    .poster-action { color: #D4A574; }
+    .poster-trend { color: rgba(243,232,255,0.4); font-style: italic; }
+    .poster-risk-area {
+        margin: 10px 0;
+        padding: 10px 12px;
+        background: rgba(231,76,60,0.08);
+        border: 1px solid rgba(231,76,60,0.15);
+        border-radius: 8px;
+    }
+    .poster-risk-title {
+        font-size: 12px;
+        color: #E74C3C;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+    .poster-risk {
+        font-size: 13px;
+        color: rgba(231,76,60,0.8);
+        line-height: 1.6;
+    }
+    .poster-meme {
+        font-size: 13px;
+        color: rgba(243,232,255,0.5);
+        font-style: italic;
+        text-align: center;
+        padding: 8px;
+        border-top: 1px dashed rgba(255,255,255,0.08);
+    }
+    .poster-timestamp {
+        font-size: 10px;
+        color: rgba(243,232,255,0.2);
+        text-align: center;
+        margin-top: 12px;
+    }
+    .poster-cta-area { margin: 12px 0; }
+    .poster-bottom-deco {
+        height: 50px;
+        background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(75,44,130,0.15));
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .poster-bottom-text {
+        text-align: center;
+        padding: 8px 0;
+        font-size: 12px;
+        color: rgba(243,232,255,0.3);
+    }
+    .poster-watermark {
+        text-align: center;
+        padding: 4px 0 12px;
+        font-size: 10px;
+        color: rgba(243,232,255,0.15);
+    }
+    .poster-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+        width: 100%;
+        max-width: 400px;
+    }
+    .poster-actions .btn-primary,
+    .poster-actions .btn-secondary,
+    .poster-actions .btn-sarcastic {
+        width: 100%;
+        touch-action: manipulation;
+    }
+    .poster-btn-home {
+        position: fixed;
+        top: calc(env(safe-area-inset-top, 0px) + 14px);
+        right: 14px;
+        left: auto !important;
+        background: rgba(255,255,255,0.08) !important;
+        border: none !important;
+        color: #F3E8FF !important;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10040;
+    }
+    @media (min-width: 768px) {
+        .poster-card { max-width: 420px; }
+        .poster-illustration { height: 220px; }
+        .poster-illust-lg { height: 260px; }
+    }
+    /* ========== 海报二（挂签卡）样式 ========== */
+    .tagcard-shell{position:relative;width:100%;max-width:430px;margin:0 auto;}
+    .tagcard-card{position:relative;z-index:2;width:100%;max-width:380px;margin:20px auto 0;padding:20px 16px 18px;border-radius:30px;background-color:#1a1030;background-size:cover;background-position:center;background-origin:border-box;background-clip:border-box;box-shadow:0 24px 50px rgba(24,48,90,.18);overflow:hidden;display:flex;flex-direction:column;min-height:760px;max-height:none;}
+    .tagcard-card::before{content:'';position:absolute;inset:0;border-radius:28px;background:linear-gradient(180deg,rgba(7,8,18,.14) 0%,rgba(7,8,18,.08) 34%,rgba(7,8,18,.22) 100%);z-index:0;pointer-events:none;}
+    .tagcard-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:31%;border-radius:0 0 28px 28px;background:linear-gradient(180deg,rgba(7,8,18,0) 0%,rgba(8,10,24,.18) 26%,rgba(8,10,24,.56) 68%,rgba(8,10,24,.82) 100%);z-index:0;pointer-events:none;}
+    .tagcard-card>*{position:relative;z-index:1;}
+    .tagcard-hole{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.3);box-shadow:inset 0 2px 6px rgba(0,0,0,.15);}
+    .tagcard-string{position:absolute;top:-60px;left:50%;width:2px;height:76px;background:rgba(255,255,255,.5);transform:translateX(-50%) rotate(4deg);}
+    .tagcard-top{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+    .tagcard-top-chip{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#fff;font-size:14px;font-weight:800;}
+    .tagcard-sound{font-size:20px;color:rgba(255,255,255,.6);}
+    .tagcard-main{position:relative;margin-top:4px;min-height:160px;padding:4px 4px 0;}
+    .tagcard-persona{font-size:13px;letter-spacing:3px;color:rgba(255,255,255,.6);font-weight:900;}
+    .tagcard-badge{position:absolute;top:8px;right:0;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:700;}
+    .tagcard-title{margin:8px 0 0;font-size:26px;font-weight:900;color:#fff;line-height:1.2;text-shadow:0 2px 12px rgba(0,0,0,.3);}
+    .tagcard-trend-inline{font-size:10px;color:rgba(255,255,255,.45);font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.3);margin-top:2px;}
+    .tagcard-oneliner{color:rgba(255,255,255,.8);font-size:16px;line-height:1.4;margin:6px 0 0;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.2);margin-left:-2px;}
+    .tagcard-body{margin-top:10px;border-radius:24px;padding:14px 12px;flex:1;overflow-y:auto;min-height:0;}
+    .tagcard-rec{font-size:10px;color:rgba(255,255,255,.45);font-weight:700;margin-top:6px;}
+    .tagcard-block-title{font-size:10px;color:rgba(255,255,255,.45);margin-bottom:3px;font-weight:700;}
+    .tagcard-text{color:rgba(255,255,255,.75);line-height:1.7;font-size:12px;}
+    .tagcard-stats{margin-top:10px;display:grid;grid-template-columns:1fr;gap:8px;}
+    .tagcard-stat{background:rgba(255,255,255,.1);backdrop-filter:blur(6px);border-radius:14px;padding:10px 8px;text-align:left;}
+    .tagcard-stat strong{display:block;font-size:12px;color:#fff;margin-bottom:2px;}
+    .tagcard-stat span{font-size:10px;color:rgba(255,255,255,.45);font-weight:700;}
+    .tagcard-footer{margin-top:auto;border-radius:0 0 24px 24px;padding:6px 12px 10px;}
+    .tagcard-footer-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:4px;}
+    .tagcard-share-hint{font-size:13px;color:rgba(255,255,255,.94);line-height:1.7;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,rgba(34,197,94,.18),rgba(99,102,241,.22));border:1px solid rgba(255,255,255,.16);text-align:left;animation:sharePulse 2s ease-in-out infinite;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.18);}
+    .tagcard-timestamp{margin-top:8px;font-size:10px;color:rgba(255,255,255,.4);}
+    .poster-qrcode{width:84px;height:84px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:8px;color:#999;text-align:center;line-height:1.3;flex-shrink:0;align-self:end;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.24);}
+    .hero-share-banner{display:none;align-items:center;justify-content:center;gap:8px;min-height:34px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(248,250,252,.86);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin:12px auto 0;backdrop-filter:blur(10px);}
+    .share-deeplink-focus{box-shadow:0 0 0 2px rgba(244,211,138,.72),0 0 48px rgba(244,211,138,.45) !important;animation:shareFocusPulse 1.8s ease-in-out 2;}
+    @keyframes shareFocusPulse{0%,100%{transform:translateZ(0) scale(1);}50%{transform:translateZ(8px) scale(1.04);}}
+    @keyframes sharePulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.02);}}
+    @media (min-width: 768px) {
+        .md\:flex { display: flex; }
+        .md\:text-5xl { font-size: 3rem; }
+        .hidden.md\:flex { display: flex; }
+        .cosmic-canvas > nav {
+            max-width: min(1120px, 100vw - 64px);
+            padding: 1.2rem 0 0.35rem;
+            justify-content: center;
+        }
+        .hidden.md\:flex {
+            display: none !important;
+        }
+        header.text-center {
+            position: relative;
+            top: 24px;
+            margin-bottom: 1.25rem !important;
+        }
+        .orbital-stage {
+            max-width: min(1180px, 100vw - 64px);
+            height: clamp(560px, min(68vh, 58vw), 820px);
+        }
+        .hero-cta-wrap {
+            bottom: clamp(0px, 2vh, 18px);
+        }
+        .cosmic-canvas > footer {
+            padding: 0.8rem 0 1.2rem;
+        }
+    }
+</style>
+<style>
+        :root {
+            --celestial-bg: #050510;
+            --oracle-glow: rgba(139, 92, 246, 0.3);
+            --orbit-radius-x: 320px;
+            --orbit-radius-y: 120px;
+            --animation-speed: 30s;
+        }
+        body {
+            background-color: var(--celestial-bg);
+            color: #E2E8F0;
+            overflow-x: hidden;
+        }
+        .cosmic-canvas {
+            background:
+                radial-gradient(circle at 50% 50%, rgba(75, 44, 130, 0.4) 0%, transparent 70%),
+                radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.2) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 100 L150 120 M150 120 L180 80 M800 200 L850 250 M850 250 L820 300 M300 800 L350 750 M350 750 L400 800' stroke='rgba(255,255,255,0.05)' fill='none' stroke-width='1'/%3E%3Ccircle cx='150' cy='120' r='1.5' fill='white' opacity='0.2'/%3E%3Ccircle cx='180' cy='80' r='1.5' fill='white' opacity='0.2'/%3E%3Ccircle cx='850' cy='250' r='1.5' fill='white' opacity='0.2'/%3E%3C/svg%3E");
+        }
+        
+        .orbital-stage {
+            position: relative;
+            width: 100%;
+            max-width: min(1120px, 100vw - 48px);
+            height: clamp(480px, min(64vh, 56vw), 760px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 2000px;
+            transform-style: preserve-3d;
+            touch-action: pan-y;
+            margin-inline: auto;
+        }
+        .hero-cta-wrap {
+            position: absolute;
+            left: 50%;
+            bottom: clamp(-8px, 1.8vh, 12px);
+            transform: translateX(-50%);
+            z-index: 8;
+            width: min(88vw, 360px);
+            display: flex;
+            justify-content: center;
+        }
+
+        .orbital-ring {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        z-index: 4;
+        /* 动画由 JS 接管 */
+    }
+
+        @keyframes orbit-rotation {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        .orbit-card {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: clamp(110px, 9vw, 132px);
+            height: clamp(132px, 11vw, 156px);
+            margin-left: calc(clamp(110px, 9vw, 132px) / -2);
+            margin-top: calc(clamp(132px, 11vw, 156px) / -2);
+            background-size: cover;
+            background-position: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+            cursor: pointer;
+            backface-visibility: hidden;
+            overflow: hidden;
+            pointer-events: auto;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .orbit-card .card-label {
+            width: 100%;
+            padding: 6px 4px;
+            background: linear-gradient(180deg, rgba(5, 5, 16, 0) 0%, rgba(5, 5, 16, 0.1) 36%, rgba(5, 5, 16, 0.48) 76%, rgba(5, 5, 16, 0.72) 100%);
+            text-align: center;
+            font-size: 11px;
+            color: #F3E8FF;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .orbit-card:hover {
+            border-color: #10B981;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+        .orbit-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(75, 44, 130, 0.3);
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .orbit-card:hover::after {
+            opacity: 1;
+        }
+
+        .oracle-card-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform: rotateY(calc(var(--index) * (360deg / 13)));
+            pointer-events: none;
+        }
+
+        .oracle-card-inner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) translateZ(var(--orbit-radius-x));
+            transform-style: preserve-3d;
+            pointer-events: none;
+        }
+
+        .orbit-card span {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 0 0.5rem;
+        }
+        .oracle-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            color: #10B981;
+            box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+        .orbit-card:hover .oracle-icon {
+            color: #F3E8FF;
+            text-shadow: 0 0 10px rgba(243, 232, 255, 0.8);
+        }
+
+        .central-anchor {
+            position: absolute;
+            top: 46%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(50px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* 3D Earth Sphere Styling */
+        .cosmic-sphere {
+            width: clamp(240px, 24vw, 360px);
+            height: clamp(240px, 24vw, 360px);
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.2) 0%, rgba(75, 44, 130, 0.3) 100%),
+                url("https://www.transparenttextures.com/patterns/dark-matter.png");
+            background-color: #0c0c1e;
+            box-shadow: 
+                inset -20px -20px 50px rgba(0, 0, 0, 0.8),
+                inset 10px 10px 40px rgba(139, 92, 246, 0.3),
+                0 0 80px rgba(75, 44, 130, 0.4),
+                0 0 30px rgba(16, 185, 129, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: sphere-pulse 8s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        .sphere-clouds {
+            position: absolute;
+            inset: 0;
+            background: url("https://www.transparenttextures.com/patterns/clouds.png");
+            opacity: 0.15;
+            animation: cloud-drift 120s linear infinite;
+        }
+
+        .sphere-glint {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(243, 232, 255, 0.15) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        @keyframes cloud-drift {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 500px; }
+        }
+
+        @keyframes sphere-pulse {
+            from { transform: scale(1); filter: brightness(1); }
+            to { transform: scale(1.02); filter: brightness(1.1); }
+        }
+
+        .celestial-btn {
+            background: linear-gradient(135deg, #4B2C82 0%, #10B981 100%);
+            color: #F3E8FF;
+            padding: 1.25rem 3.5rem;
+            border-radius: 9999px;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: 0.15em;
+            box-shadow: 0 0 40px rgba(75, 44, 130, 0.5), 0 0 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 0 0 10px rgba(243, 232, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            touch-action: manipulation;
+        }
+        .celestial-btn:hover {
+            transform: scale(1.08) translateY(-5px);
+            box-shadow: 0 15px 50px rgba(75, 44, 130, 0.7), 0 0 25px rgba(16, 185, 129, 0.5);
+            filter: brightness(1.2);
+        }
+        .recommend-chip {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: rgba(243, 232, 255, 0.7);
+            background: rgba(75, 44, 130, 0.3);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        .recommend-chip:hover {
+            color: #f3e8ff;
+            background: rgba(75, 44, 130, 0.5);
+            border-color: rgba(16, 185, 129, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(75, 44, 130, 0.4);
+        }
+        .shooting-star-v2 {
+            position: absolute;
+            background: linear-gradient(90deg, rgba(243, 232, 255, 0.8), transparent);
+            height: 1px;
+            pointer-events: none;
+        }
+
+        /* Twinkling Stars Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+        }
+        /* Shooting Stars (Meteors) */
+        .shooting-star {
+            position: absolute;
+            top: var(--top);
+            right: var(--right);
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.9), transparent);
+            transform: rotate(-45deg);
+            filter: drop-shadow(0 0 8px #fff);
+            opacity: 0;
+            z-index: 10;
+        }
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255,255,255,0.8);
+        }
+        .animate-meteor {
+            animation: meteor-streak var(--duration) linear var(--delay) infinite;
+        }
+        @keyframes meteor-streak {
+            0% { transform: rotate(-45deg) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            30% { transform: rotate(-45deg) translateX(-600px); opacity: 0; }
+            100% { transform: rotate(-45deg) translateX(-600px); opacity: 0; }
+        }
+
+        /* 覆盖经典版CSS的body样式，保护宇宙版背景 */
+        body {
+            background-image: none !important;
+            background: #050510 !important;
+        }
+
+        /* 覆盖 style.css 的全局 transition，避免干扰轨道动画 */
+        .orbital-stage,
+        .orbital-stage * {
+            transition-property: none !important;
+            transition-duration: 0s !important;
+        }
+
+        /* 经典版激活时的背景 */
+        body.classic-active {
+            background: var(--bg-primary, #0F0F1A) !important;
+            background-image: url('assets/bg-cosmos.png') !important;
+            background-size: cover !important;
+            background-position: center top !important;
+            background-attachment: fixed !important;
+        }
+
+        /* ===== 移动端适配 ===== */
+        @media (max-width: 767px) {
+            :root {
+                --orbit-radius-x: 148px;
+                --orbit-radius-y: 86px;
+            }
+            html, body {
+                min-height: 100dvh;
+            }
+            .cosmic-canvas {
+                min-height: 100dvh;
+            }
+            .orbital-stage {
+                max-width: 100%;
+                height: min(60vh, 520px);
+                min-height: 430px;
+                perspective: 1200px;
+                margin-top: 0;
+                touch-action: pan-y;
+            }
+            .orbit-card {
+                width: 80px;
+                height: 108px;
+                margin-left: -40px;
+                margin-top: -54px;
+                border-radius: 0.9rem;
+                padding: 8px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+            }
+            .orbit-card .card-label {
+                margin: -8px;
+                padding: 10px 5px 8px;
+                border-radius: 0.9rem;
+                font-size: 11px;
+                line-height: 1.2;
+            }
+            .orbit-card .oracle-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 16px;
+            }
+            .orbit-card span {
+                font-size: 0.5rem;
+            }
+            .cosmic-sphere {
+                width: 150px;
+                height: 150px;
+                margin-top: -12px;
+            }
+            .cosmic-canvas > nav {
+                padding: calc(env(safe-area-inset-top, 0px) + 0.85rem) 1rem 0.8rem;
+            }
+            .celestial-btn {
+                padding: 1rem 2rem;
+                font-size: 1.02rem;
+                margin-top: 0;
+                width: min(88vw, 308px);
+                text-align: center;
+                letter-spacing: 0.08em;
+            }
+            .text-4xl, h1 {
+                font-size: 2.05rem !important;
+            }
+            main.flex-1 {
+                min-height: calc(100dvh - 68px);
+                padding: 0.35rem 1rem 1.2rem !important;
+            }
+            header.text-center {
+                margin-bottom: 0.55rem !important;
+                padding-top: 0.95rem;
+                position: relative;
+                top: 22px;
+            }
+            .tracking-\[0\.3em\] {
+                letter-spacing: 0.1em !important;
+            }
+            .central-anchor {
+                top: 44.5%;
+                transform: translate(-50%, -50%);
+            }
+            .hero-cta-wrap {
+                bottom: -18px;
+                width: 100%;
+            }
+            .tagcard-card {
+                max-width: min(100%, 392px);
+                min-height: 840px;
+                padding: 22px 18px 20px;
+            }
+            .tagcard-title {
+                font-size: 30px;
+            }
+            .tagcard-oneliner {
+                font-size: 17px;
+            }
+            .tagcard-text {
+                font-size: 13px;
+                line-height: 1.8;
+            }
+            .poster-card {
+                max-width: 420px;
+                min-height: 980px;
+            }
+            .poster-content {
+                padding: 0 26px 24px;
+            }
+            .poster-title {
+                font-size: 24px;
+                line-height: 1.5;
+            }
+            .poster-text {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+            .stars-container,
+            .shooting-star {
+                pointer-events: none;
+            }
+            /* 汉堡菜单 */
+            #menu-toggle { display: flex !important; }
+            .mobile-nav-dropdown {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 30, 0.95);
+                backdrop-filter: blur(12px);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.75rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .mobile-nav-dropdown.open { display: flex; }
+            .mobile-nav-dropdown a {
+                padding: 0.75rem 1rem;
+                border-radius: 0.5rem;
+                transition: background 0.2s;
+            }
+            .mobile-nav-dropdown a:active { background: rgba(255,255,255,0.1); }
+            #classic-app {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            #classic-app .page.active {
+                width: 100%;
+                min-height: 100dvh;
+                justify-content: flex-start;
+            }
+            .loading-container {
+                padding: 24px 20px 40px;
+            }
+            .loading-orbit {
+                transform: scale(0.88);
+            }
+            .loading-text {
+                font-size: 14px;
+                text-align: center;
+                padding: 0 12px;
+            }
+            .permission-overlay {
+                padding: 18px;
+                align-items: flex-end;
+            }
+            .permission-modal {
+                width: 100%;
+                border-radius: 24px 24px 18px 18px;
+                padding: 22px 18px calc(env(safe-area-inset-bottom, 0px) + 18px);
+            }
+            .permission-options {
+                gap: 10px;
+            }
+            .poster-container {
+                width: 100%;
+                min-height: 100dvh;
+                justify-content: flex-start;
+                padding: calc(env(safe-area-inset-top, 0px) + 14px) 12px calc(env(safe-area-inset-bottom, 0px) + 18px);
+            }
+            .tagcard-shell,
+            .poster-card,
+            .poster-actions {
+                max-width: 100%;
+            }
+            .tagcard-card {
+                max-width: none;
+                width: 100%;
+                margin-top: 14px;
+                padding: 20px 16px 18px;
+                border-radius: 28px;
+                aspect-ratio: auto;
+                min-height: 820px;
+                max-height: none;
+            }
+            .tagcard-string {
+                top: -44px;
+                height: 58px;
+            }
+            .tagcard-top {
+                margin-top: 12px;
+            }
+            .tagcard-top-chip {
+                padding: 7px 12px;
+                font-size: 12px;
+            }
+            .tagcard-main {
+                min-height: 132px;
+                margin-top: 8px;
+            }
+            .tagcard-badge {
+                position: static;
+                display: inline-flex;
+                margin-top: 8px;
+            }
+            .tagcard-title {
+                font-size: 24px;
+                line-height: 1.18;
+                margin-top: 10px;
+                max-width: 92%;
+            }
+            .tagcard-trend-inline {
+                margin-top: 6px;
+                font-size: 11px;
+                line-height: 1.4;
+            }
+            .tagcard-oneliner {
+                font-size: 15px;
+                line-height: 1.5;
+                margin-top: 10px;
+            }
+            .tagcard-body {
+                overflow: visible;
+                padding: 12px 2px 0;
+            }
+            .tagcard-text {
+                font-size: 13px;
+                line-height: 1.75;
+            }
+            .tagcard-stat {
+                padding: 12px 10px;
+            }
+            .tagcard-footer {
+                padding: 10px 2px 2px;
+            }
+            .tagcard-share-hint {
+                font-size: 13px;
+                line-height: 1.7;
+                padding: 10px 12px;
+                min-height: 82px;
+                display: flex;
+                align-items: center;
+            }
+            .poster-qrcode {
+                width: 72px;
+                height: 72px;
+                font-size: 7px;
+                border-radius: 12px;
+                object-fit: cover;
+                background: #fff;
+                padding: 4px;
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+            }
+            .poster-card {
+                border-radius: 18px;
+                min-height: 960px;
+            }
+            .poster-bg {
+                min-height: 180px;
+                object-fit: cover;
+            }
+            .poster-quote-area {
+                padding: 14px 16px;
+            }
+            .poster-quote {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+            .poster-content {
+                padding: 0 20px 20px;
+                margin-top: -20px;
+            }
+            .poster-title,
+            .poster-title-oracle {
+                font-size: 24px;
+                line-height: 1.45;
+                margin-bottom: 14px;
+            }
+            .poster-text,
+            .poster-risk,
+            .poster-meme {
+                font-size: 13px;
+                line-height: 1.7;
+            }
+            .poster-watermark {
+                padding-bottom: 16px;
+            }
+            .poster-actions {
+                position: relative;
+                z-index: 20;
+                gap: 10px;
+                margin-top: 14px;
+                padding-top: 44px;
+                pointer-events: auto;
+            }
+            .poster-btn-home {
+                top: calc(env(safe-area-inset-top, 0px) + 12px);
+                right: 12px;
+                left: auto !important;
+                width: 38px;
+                height: 38px;
+            }
+            .poster-actions .user-input-area {
+                flex-direction: column !important;
+                gap: 10px !important;
+                margin-bottom: 0 !important;
+            }
+            .poster-actions .user-nickname-input,
+            .poster-actions .user-signature-input {
+                width: 100%;
+                min-height: 42px;
+                font-size: 16px !important;
+            }
+            .poster-actions .btn-primary,
+            .poster-actions .btn-secondary,
+            .poster-actions .btn-sarcastic {
+                min-height: 46px;
+                font-size: 15px;
+                position: relative;
+                z-index: 21;
+                pointer-events: auto;
+            }
+            .share-container {
+                width: 100%;
+                min-height: 100dvh;
+                padding: calc(env(safe-area-inset-top, 0px) + 16px) 20px calc(env(safe-area-inset-bottom, 0px) + 16px);
+            }
+            .share-buttons {
+                display: flex;
+                flex-direction: row;
+                gap: 12px;
+                width: 100%;
+                max-width: 360px;
+            }
+            .share-buttons .btn-primary,
+            .share-buttons .btn-secondary {
+                flex: 1;
+                min-height: 45px;
+                padding: 14px 12px;
+                font-size: 13px;
+                white-space: nowrap;
+            }
+            .btn-back-result {
+                width: auto;
+                margin-top: 12px;
+            }
+            .share-note {
+                font-size: 11px;
+                margin-top: 8px;
+            }
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-mystic-purple/50 selection:text-pearl-glow">
+<div class="cosmic-canvas min-h-screen flex flex-col relative overflow-hidden" style="background:#050510;">
+<nav class="relative w-full max-w-7xl mx-auto px-8 py-6 flex justify-between items-center z-50" style="background:rgba(5,5,16,0.9);backdrop-filter:blur(8px);">
+<!-- 桌面端导航 -->
+<div class="hidden md:flex gap-10 items-center">
+<a class="font-headline text-emerald-glint border-b-2 border-emerald-glint/50 pb-1 tracking-widest text-sm no-underline" href="home.html">缘起</a>
+<a class="font-headline text-pearl-glow/60 hover:text-pearl-glow transition-colors tracking-widest text-sm no-underline" href="index.html">仪式</a>
+<a class="font-headline text-pearl-glow/60 hover:text-pearl-glow transition-colors tracking-widest text-sm no-underline" href="index_classic.html">天启</a>
+<a class="font-headline text-pearl-glow/60 hover:text-pearl-glow transition-colors tracking-widest text-sm no-underline" href="home.html#about">祈愿</a>
+</div>
+<!-- 移动端下拉菜单 -->
+<div id="mobile-menu" class="mobile-nav-dropdown" style="display:none;">
+<!-- 导航已移除 -->
+</div>
+</nav>
+<main class="flex-1 flex flex-col items-center justify-start px-6 py-4 relative z-20">
+<header class="text-center mb-12">
+<h1 id="hero-title" class="text-4xl md:text-5xl font-black font-headline text-pearl-glow mb-2 drop-shadow-[0_0_20px_rgba(243,232,255,0.4)]">
+                上帝帮你掷骰子
+            </h1>
+<p id="hero-subtitle" class="text-emerald-glint/70 tracking-[0.3em] font-light text-xs uppercase">
+                把今天这一步先定下来，不用再反复内耗
+            </p>
+<div id="hero-share-banner" class="hero-share-banner"></div>
+</header>
+<div class="orbital-stage">
+<!-- 3D Orbiting Cards Container -->
+<div class="orbital-ring">
+<!-- Card 1 -->
+<div class="oracle-card-wrapper" style="--index: 0;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="eat_today" style="background-image:url('assets/cards/eat_today_v4.jpg?v=5');">
+<div class="card-label">今天吃什么</div>
+</a>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="oracle-card-wrapper" style="--index: 1;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="drink_today" style="background-image:url('assets/cards/drink_today_v4.jpg?v=5');">
+<div class="card-label">今天喝什么</div>
+</a>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="oracle-card-wrapper" style="--index: 2;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="wear_today" style="background-image:url('assets/cards/wear_today_v4.jpg?v=5');">
+<div class="card-label">今天穿什么</div>
+</a>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="oracle-card-wrapper" style="--index: 3;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="go_out" style="background-image:url('assets/cards/go_out_v4.jpg?v=6');">
+<div class="card-label">要不要出门</div>
+</a>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="oracle-card-wrapper" style="--index: 4;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="send_msg" style="background-image:url('assets/cards/send_msg_v4.jpg?v=5');">
+<div class="card-label">发不发消息</div>
+</a>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="oracle-card-wrapper" style="--index: 5;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="buy_it" style="background-image:url('assets/cards/buy_it_v4.jpg?v=5');">
+<div class="card-label">买不买这个</div>
+</a>
+</div>
+</div>
+<!-- Card 7 -->
+<div class="oracle-card-wrapper" style="--index: 6;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="wash_hair" style="background-image:url('assets/cards/wash_hair_v4.jpg?v=5');">
+<div class="card-label">今天要洗头吗</div>
+</a>
+</div>
+</div>
+<!-- Card 8 -->
+<div class="oracle-card-wrapper" style="--index: 7;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="sleep_early" style="background-image:url('assets/cards/sleep_early_v4.jpg?v=5');">
+<div class="card-label">今天要早睡吗</div>
+</a>
+</div>
+</div>
+<!-- Card 9 -->
+<div class="oracle-card-wrapper" style="--index: 8;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="custom" data-q="去不去约会" style="background-image:url('assets/cards/date_v4.jpg?v=5');">
+<div class="card-label">去不去约会</div>
+</a>
+</div>
+</div>
+<!-- Card 10 -->
+<div class="oracle-card-wrapper" style="--index: 9;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="custom" data-q="今天要不要健身" style="background-image:url('assets/cards/fitness_v4.jpg?v=5');">
+<div class="card-label">今天要健身吗</div>
+</a>
+</div>
+</div>
+<!-- Card 11 -->
+<div class="oracle-card-wrapper" style="--index: 10;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="custom" data-q="今天要不要学习" style="background-image:url('assets/cards/study_v4.jpg?v=8');background-size:118% auto;background-position:center 40%;">
+<div class="card-label">今天要学习吗</div>
+</a>
+</div>
+</div>
+<!-- Card 12 -->
+<div class="oracle-card-wrapper" style="--index: 11;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline" href="javascript:void(0)" data-tpl="custom" data-q="今天要不要减肥" style="background-image:url('assets/cards/diet_v4.jpg?v=5');">
+<div class="card-label">今天要减肥吗</div>
+</a>
+</div>
+</div>
+<!-- Card 13 (Custom) -->
+<div class="oracle-card-wrapper" style="--index: 12;">
+<div class="oracle-card-inner">
+<a class="orbit-card no-underline border-dashed border-emerald-glint/40" href="javascript:void(0)" data-tpl="custom" style="background-image:url('assets/cards/custom_v4.jpg?v=5');">
+<div class="card-label">我有一个问题</div>
+</a>
+</div>
+</div>
+</div>
+<!-- Central Content (Anchor) -->
+<div class="central-anchor">
+<!-- Luminous 3D Planetary Sphere Replacement -->
+<div class="cosmic-sphere flex items-center justify-center relative" style="background: none; overflow: hidden; box-shadow: 0 0 80px rgba(75, 44, 130, 0.4), 0 0 30px rgba(16, 185, 129, 0.2);"><img alt="Realistic Earth" class="rounded-full opacity-90 absolute" style="width: 130%; height: 130%; top: 50%; left: 50%; transform: translate(-50%, -50%); object-fit: cover;" src="assets/earth.png"/></div>
+</div>
+<div class="hero-cta-wrap">
+<button id="btn-random-pick" class="celestial-btn group">
+                    让宇宙帮我选
+                </button>
+</div>
+</div>
+</div>
+</main>
+
+<!-- ========== 经典版功能页面（内嵌） ========== -->
+<div id="classic-app" style="display:none;position:fixed;inset:0;z-index:9999;background:#0B0B1A;background-image:radial-gradient(ellipse at 20% 50%, rgba(75,44,130,0.15) 0%, transparent 50%),radial-gradient(ellipse at 80% 20%, rgba(16,185,129,0.08) 0%, transparent 50%),radial-gradient(ellipse at 50% 80%, rgba(99,102,241,0.1) 0%, transparent 50%);">
+  <!-- 权限层 -->
+  <section id="page-permission" class="page">
+    <div class="permission-overlay">
+      <div class="permission-modal animate-slide-up">
+        <h2>提升精度</h2>
+        <p>允许获取位置，宇宙会根据当地真太阳时给你更精准的信号</p>
+        <div class="permission-options">
+          <button class="permission-btn primary" id="btn-geo-grant">获取专属信号</button>
+          <button class="permission-btn" id="btn-geo-default">快速模式（通用信号）</button>
+          <button class="permission-btn" id="btn-geo-skip">随便，都行</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 加载动画 -->
+  <section id="page-loading" class="page">
+    <div class="loading-container">
+      <div class="loading-orbit">
+        <div class="loading-ring ring-1"></div>
+        <div class="loading-ring ring-2"></div>
+        <div class="loading-ring ring-3"></div>
+        <div class="loading-core"></div>
+      </div>
+      <p class="loading-text"><span id="loading-msg">宇宙正在接收信号</span><span class="loading-dots"></span></p>
+    </div>
+  </section>
+
+  <!-- 结果页-轻题（海报二·挂签卡风格） -->
+  <section id="page-result-light" class="page">
+    <div class="poster-container">
+      <div class="tagcard-shell">
+        <div class="tagcard-card" id="poster-light">
+          <div class="tagcard-hole"></div>
+          <div class="tagcard-string"></div>
+          <div class="tagcard-top">
+            <div class="tagcard-top-chip">宇宙今日神谕</div>
+            <div class="tagcard-sound">◉</div>
+          </div>
+          <div class="tagcard-main">
+            <div class="tagcard-persona" id="result-persona"></div>
+            <div class="tagcard-badge" id="result-badge"></div>
+            <h1 class="tagcard-title" id="result-title"></h1>
+            <div class="tagcard-trend-inline" id="result-trend"></div>
+            <p class="tagcard-oneliner" id="result-quote" style="display:none;"></p>
+          </div>
+          <div class="tagcard-body">
+            <div class="tagcard-rec">● REC</div>
+            <div class="tagcard-block">
+              <div class="tagcard-block-title" id="result-reason-label">判断依据</div>
+              <div class="tagcard-text" id="result-reason"></div>
+            </div>
+            <div class="tagcard-risk-area" id="result-risk-area" style="display:none;">
+              <div class="tagcard-text" id="result-risk" style="color:rgba(231,76,60,0.8);"></div>
+            </div>
+            <div class="tagcard-stats">
+              <div class="tagcard-stat"><strong id="result-action"></strong><span id="result-action-label">下一步怎么做</span></div>
+            </div>
+          </div>
+          <div class="tagcard-footer">
+            <div class="tagcard-footer-title" id="result-bottom-text"></div>
+            <div class="tagcard-timestamp" id="result-timestamp"></div>
+            <div id="result-time-egg" style="display:none;font-size:10px;color:rgba(255,255,255,.5);margin-top:4px;"></div>
+            <div style="display:flex;align-items:end;justify-content:space-between;margin-top:4px;">
+              <div class="tagcard-share-hint" id="result-meme-area" style="display:none;flex:1;margin-right:8px;"><span id="result-meme"></span></div>
+              <img class="poster-qrcode" id="result-light-qrcode" src="assets/qrcode-god.png" alt="项目二维码">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 操作按钮（海报外部） -->
+      <div class="poster-actions">
+        <button class="btn-home poster-btn-home" id="btn-home-light">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
+        <button class="btn-primary" id="btn-retry">再给上帝一次机会</button>
+        <button class="btn-sarcastic" id="btn-sarcastic" data-action="toggle-sarcastic" onclick="window.__awknToggleSarcastic?.(event)" style="display:none;">切换毒舌模式</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 结果页-重题（海报风格） -->
+  <section id="page-result-oracle" class="page">
+    <div class="poster-container">
+      <div class="poster-card animate-slide-up" id="poster-oracle">
+        <img class="poster-bg" id="poster-oracle-bg" src="assets/posters/custom.jpg" alt="海报">
+        <div class="poster-quote-area" id="oracle-quote-area" style="display:none;">
+          <div class="poster-quote" id="oracle-quote"></div>
+        </div>
+        <div class="poster-divider"></div>
+        <div class="poster-content">
+          <div class="poster-title poster-title-oracle" id="oracle-title"></div>
+          <div class="poster-section">
+            <div class="poster-label" id="oracle-reason-label">判断依据</div>
+            <div class="poster-text" id="oracle-reason"></div>
+          </div>
+          <div class="poster-risk-area" id="oracle-risk-area" style="display:none;">
+            <div class="poster-risk-title">风险提示</div>
+            <div class="poster-risk" id="oracle-risk"></div>
+          </div>
+          <div class="poster-section">
+            <div class="poster-label" id="oracle-action-label">下一步怎么做</div>
+            <div class="poster-text poster-action" id="oracle-action"></div>
+          </div>
+          <div class="poster-section">
+            <div class="poster-label" id="oracle-trend-label">情绪提醒</div>
+            <div class="poster-text poster-trend" id="oracle-trend"></div>
+          </div>
+          <div class="poster-meme-area" id="oracle-meme-area" style="display:none;">
+            <div class="poster-label" id="oracle-meme-label">这张图适合发给</div>
+            <div class="poster-meme" id="oracle-meme"></div>
+          </div>
+          <div class="poster-timestamp" id="oracle-timestamp"></div>
+          <div class="poster-time-egg" id="oracle-time-egg" style="display:none;"></div>
+          <div class="poster-cta-area" id="oracle-cta-area" style="display:none;">
+            <button class="btn-escalate" id="btn-escalate"></button>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:center;padding:0 0 14px;">
+          <img class="poster-qrcode" id="result-oracle-qrcode" src="assets/qrcode-god.png" alt="项目二维码">
+        </div>
+        <div class="poster-watermark">— 上帝帮你掷骰子 ——宇宙不骗人</div>
+      </div>
+      <!-- 操作按钮（海报外部） -->
+      <div class="poster-actions">
+        <button class="btn-home poster-btn-home" id="btn-home-oracle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
+        <button class="btn-primary" id="btn-retry-oracle">再给上帝一次机会</button>
+        <button class="btn-sarcastic" id="btn-sarcastic-oracle" data-action="toggle-sarcastic" onclick="window.__awknToggleSarcastic?.(event)" style="display:none;">切换毒舌模式</button>
+        <button class="btn-secondary" id="btn-share-oracle">保存海报</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分享卡预览 -->
+  <section id="page-share" class="page">
+    <div class="share-container">
+      <button class="btn-home" id="btn-home-share">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </button>
+      <h2 style="color:var(--gold);font-family:var(--font-title);margin-bottom:24px;">分享给朋友</h2>
+      <div class="share-preview" id="share-preview"></div>
+      <div class="share-buttons">
+        <button class="btn-primary" id="btn-save-card">保存图片</button>
+        <button class="btn-secondary" id="btn-share-card">分享给朋友</button>
+      </div>
+      <button class="btn-back-result" id="btn-back-result">← 返回结果</button>
+      <p class="share-note">长按图片也可保存</p>
+    </div>
+  </section>
+</div>
+<!-- ========== 经典版功能页面结束 ========== -->
+<footer class="w-full py-4 flex flex-col items-center gap-4 text-center relative z-30" style="margin-top:-18px;">
+<div class="text-pearl-glow/20 text-[10px] tracking-[0.2em] uppercase">
+            © 2024 寰宇之令 · 诸神之骰
+        </div>
+</footer>
+<!-- Dynamic Background Layer -->
+<div class="stars-container">
+    <!-- Initial stars -->
+    <div class="star" style="top: 10%; left: 20%; width: 2px; height: 2px; --duration: 3s;"></div>
+    <div class="star" style="top: 30%; left: 80%; width: 1px; height: 1px; --duration: 5s;"></div>
+    <div class="star" style="top: 70%; left: 40%; width: 3px; height: 3px; --duration: 4s;"></div>
+    <div class="star" style="top: 85%; left: 15%; width: 2px; height: 2px; --duration: 6s;"></div>
+    <div class="star" style="top: 50%; left: 90%; width: 1px; height: 1px; --duration: 4.5s;"></div>
+    <div class="star" style="top: 15%; left: 60%; width: 2px; height: 2px; --duration: 3.5s;"></div>
+    <!-- Shooting Stars -->
+    <div class="shooting-star animate-meteor" style="--top: 10%; --right: 5%; --duration: 8s; --delay: 0s;"></div>
+    <div class="shooting-star animate-meteor" style="--top: 25%; --right: 15%; --duration: 12s; --delay: 4s;"></div>
+    <div class="shooting-star animate-meteor" style="--top: 50%; --right: -10%; --duration: 10s; --delay: 2s;"></div>
+    <div class="shooting-star animate-meteor" style="--top: 5%; --right: 40%; --duration: 15s; --delay: 7s;"></div>
+</div>
+</div>
+<script>
+    // Dynamically add more stars for a richer background
+    const starContainer = document.querySelector('.stars-container');
+    if (starContainer) {
+        const starCount = 100;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 1;
+            const top = Math.random() * 100;
+            const left = Math.random() * 100;
+            const duration = 2 + Math.random() * 5;
+            const delay = Math.random() * 5;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.top = `${top}%`;
+            star.style.left = `${left}%`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.animationDelay = `${delay}s`;
+            starContainer.appendChild(star);
+        }
+    }
+</script>
+<script>
+    const orbit = document.querySelector('.orbital-ring');
+    const items = document.querySelectorAll('.oracle-card-inner');
+    const totalCards = items.length;
+    const speed = 360 / 20;
+    let angle = 0;
+    let paused = false;
+    let lastTime = null;
+
+    function isMobileOrbit() {
+        return window.matchMedia('(max-width: 767px)').matches;
+    }
+
+    function renderDesktopOrbit() {
+        orbit.style.transform = 'rotateY(' + angle + 'deg)';
+        items.forEach((item, i) => {
+            const card = item.querySelector('.orbit-card');
+            if (!card) return;
+            item.style.zIndex = '1';
+
+            const totalAngle = i * (360 / totalCards) + angle;
+            let norm = ((totalAngle % 360) + 360) % 360;
+            if (norm > 180) norm -= 360;
+            const absNorm = Math.abs(norm);
+
+            if (absNorm > 100) {
+                item.style.opacity = '0';
+                item.style.pointerEvents = 'none';
+                item.style.transform = '';
+                card.style.transform = '';
+            } else {
+                const opacity = 1 - (absNorm / 100) * 0.4;
+                item.style.opacity = String(Math.max(0.6, opacity));
+                item.style.pointerEvents = 'auto';
+                item.style.transform = '';
+                card.style.transform = '';
+            }
+        });
+    }
+
+    function renderMobileOrbit() {
+        renderDesktopOrbit();
+    }
+
+    function activateOrbitCard(card) {
+        const tpl = card?.getAttribute('data-tpl');
+        if (!tpl) return;
+        const now = Date.now();
+        if (window._orbitTapLock && now - window._orbitTapLock < 350) return;
+        window._orbitTapLock = now;
+        const q = card.getAttribute('data-q');
+        if (typeof window.startFromUniverse === 'function') {
+            window.startFromUniverse(tpl, q || undefined);
+            return;
+        }
+        window.__pendingUniverseStart = { templateId: tpl, questionText: q || undefined };
+        document.dispatchEvent(new CustomEvent('awkn:start-universe', { detail: window.__pendingUniverseStart }));
+    }
+
+    function animate(time) {
+        if (!lastTime) lastTime = time;
+        const delta = (time - lastTime) / 1000;
+        lastTime = time;
+
+        if (!paused && !window._orbitPaused) {
+            angle = (angle + speed * delta) % 360;
+        }
+
+        if (isMobileOrbit()) {
+            renderMobileOrbit();
+        } else {
+            renderDesktopOrbit();
+        }
+
+        if (!window._orbitPaused) {
+            window._orbitRAF = requestAnimationFrame(animate);
+        }
+    }
+
+    window._orbitRAF = requestAnimationFrame(animate);
+    window._startOrbitAnimation = function() {
+        lastTime = null;
+        window._orbitRAF = requestAnimationFrame(animate);
+    };
+
+    const cards = document.querySelectorAll('.orbit-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => { paused = true; });
+        card.addEventListener('mouseleave', () => { paused = false; });
+        card.addEventListener('touchstart', () => { paused = true; }, { passive: true });
+        card.addEventListener('touchend', () => { setTimeout(() => { paused = false; }, 800); }, { passive: true });
+        card.addEventListener('pointerdown', (e) => {
+            if (e.pointerType !== 'mouse') paused = true;
+        });
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            activateOrbitCard(card);
+        });
+        card.addEventListener('pointerup', (e) => {
+            if (e.pointerType !== 'mouse') {
+                e.preventDefault();
+                e.stopPropagation();
+                activateOrbitCard(card);
+            }
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        if (isMobileOrbit()) {
+            renderMobileOrbit();
+        } else {
+            renderDesktopOrbit();
+        }
+    });
+</script>
+<script>
+// ─── 旧卡片预览模式：轨道卡片用旧海报图，结果页海报保持新版 ───
+if (new URLSearchParams(location.search).get('use_old_cards') === '1') {
+  const CARD_MAP = {
+    eat_today: 'eat_today', drink_today: 'drink_today', wear_today: 'wear_today',
+    wash_hair: 'wash_hair', sleep_early: 'sleep_early', go_out: 'go_out',
+    send_msg: 'send_msg', buy_it: 'buy_it', date: 'date',
+    fitness: 'fitness', study: 'study', diet: 'diet', custom: 'custom',
+  };
+  document.querySelectorAll('.orbit-card[data-tpl]').forEach(el => {
+    const name = CARD_MAP[el.dataset.tpl];
+    if (name) {
+      el.style.backgroundImage = `url('assets/posters/_old/${name}.jpg')`;
+    }
+  });
+}
+</script>
+<script src="js/vendor/qrcode.min.js?v=1"></script>
+    <script type="module" src="js/classic-bridge.js?v=61"></script>
+<script>
+    // 汉堡菜单
+    document.getElementById('menu-toggle')?.addEventListener('click', function() {
+        document.getElementById('mobile-menu')?.classList.toggle('open');
+    });
+    // 点击菜单链接后关闭
+    document.querySelectorAll('#mobile-menu a').forEach(a => {
+        a.addEventListener('click', () => {
+            document.getElementById('mobile-menu')?.classList.remove('open');
+        });
+    });
+</script>
+</body></html>
